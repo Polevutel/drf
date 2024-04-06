@@ -6,4 +6,4 @@ class Product(models.Model):
 
 class Warehouse(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    storage_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)

@@ -1,19 +1,22 @@
+
 from rest_framework import generics
-from rest_framework import filters
-from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 from .models import Product, Warehouse
 from .serializers import ProductSerializer, WarehouseSerializer
+from .filters import ProductFilter, WarehouseFilter
 
-class ProductList(generics.ListAPIView):
+class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = ProductFilter
     search_fields = ['name', 'description']
-    pagination_class = PageNumberPagination
 
-class WarehouseList(generics.ListAPIView):
+class WarehouseListCreateView(generics.ListCreateAPIView):
     queryset = Warehouse.objects.all()
     serializer_class = WarehouseSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = WarehouseFilter
     search_fields = ['product__name']
-    pagination_class = PageNumberPagination
+    ordering_fields = ['cost']
